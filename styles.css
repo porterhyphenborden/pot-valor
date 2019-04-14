@@ -1,0 +1,126 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
+}
+
+body {
+  max-width: 90%;
+  margin: 5px auto;
+}
+
+header {
+  text-align: center;
+  display: flex;
+  flex-direction: column; /*change to row for other pages*/
+  align-items: center;
+}
+
+header.smallbanner {
+  flex-direction: row;
+}
+
+img.logo {
+  width: 200px;
+  /*change to 100 for other pages, change margins*/
+}
+
+img.smallbanner {
+  width: 90px;
+  margin-right: 10px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 28px;
+  margin: 8px;
+}
+
+p {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+button {
+  display: block;
+  margin: 0 auto;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+form {
+  font-size: 18px;
+}
+
+input, label {
+  display: block;
+  margin: 5px 0;
+}
+
+fieldset {
+  margin-top: 8px;
+}
+
+legend {
+  font-size: 24px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+input[type="radio"] {
+  display: none; 
+}
+
+.drink-select label {
+  display: block;
+  padding: 10px;
+  font-size:24px;
+  border: 2px solid rgb(3, 3, 3);
+  border-radius: 4px;
+  margin: 10px;
+}
+
+.drink-select input {
+  margin: 0;
+}
+
+.drink-select input[type="radio"]:checked + label { 
+  background-color:rgb(125, 126, 125);
+}
+
+.drink-select label:hover {
+  background-color:rgb(125, 126, 125);
+}
+
+label.with-label {
+  font-size: 20px;
+  border: none;
+  background-color: inherit;
+  padding: 0;
+  margin-left: 0;
+}
+
+label.wine {
+  padding-top: 60px;
+}
+
+input.cocktail-ingredient {
+  display: block;
+  width: 90%
+}
+
+.radio-button {
+  height: 140px;
+  width: 50%;
+}
+
+@media screen and (min-width: 50em) {
+  body {
+    max-width: 60%;
+  }
+}
+
+@media screen and (max-width: 49em)

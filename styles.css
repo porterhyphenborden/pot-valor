@@ -35,6 +35,10 @@ h2 {
   margin: 8px;
 }
 
+h4 {
+  font-size: 20px;
+}
+
 p {
   font-size: 20px;
   line-height: 28px;
@@ -64,34 +68,29 @@ legend {
   font-size: 24px;
 }
 
-.flex-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+input[type="checkbox"] {
+  display: none;
 }
 
-input[type="radio"] {
-  display: none; 
-}
-
-.drink-select label {
+label.checkbox-button {
   display: block;
   padding: 10px;
   font-size:24px;
   border: 2px solid rgb(3, 3, 3);
   border-radius: 4px;
   margin: 10px;
+  cursor: pointer;
 }
 
 .drink-select input {
   margin: 0;
 }
 
-.drink-select input[type="radio"]:checked + label { 
+label + input[type=checkbox]:checked { 
   background-color:rgb(125, 126, 125);
 }
 
-.drink-select label:hover {
+label.checkbox-button:hover {
   background-color:rgb(125, 126, 125);
 }
 
@@ -112,9 +111,61 @@ input.cocktail-ingredient {
   width: 90%
 }
 
-.radio-button {
+.checkbox-button {
   height: 140px;
   width: 50%;
+}
+
+.submit-button {
+  font-size: 20px;
+  margin: 10px auto;
+  cursor: pointer;
+}
+
+.error-overlay {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  background-color: rgba(0,0,0,0.8);
+  text-align: center;
+  font-size: 32px;
+  color: white;
+  padding: 100px 20px 0 20px;
+}
+
+.wine-overlay {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  background-color: rgba(0,0,0,0.8);
+  text-align: center;
+  font-size: 20px;
+  color: white;
+  padding: 100px 20px 0 20px;
+}
+
+img.recipe-img {
+  width: 200px;
+  display: block;
+  margin: 10px 0 20px 0;
+}
+
+li.recipe-result {
+  font-size: 22px;
+  list-style: none;
+}
+
+.recipe-result a:link {
+  text-decoration: none;
+  color: black;
 }
 
 @media screen and (min-width: 50em) {

@@ -68,54 +68,6 @@ legend {
   font-size: 24px;
 }
 
-input[type="checkbox"] {
-  display: none;
-}
-
-label.checkbox-button {
-  display: block;
-  padding: 10px;
-  font-size:24px;
-  border: 2px solid rgb(3, 3, 3);
-  border-radius: 4px;
-  margin: 10px;
-  cursor: pointer;
-}
-
-.drink-select input {
-  margin: 0;
-}
-
-label + input[type=checkbox]:checked { 
-  background-color:rgb(125, 126, 125);
-}
-
-label.checkbox-button:hover {
-  background-color:rgb(125, 126, 125);
-}
-
-label.with-label {
-  font-size: 20px;
-  border: none;
-  background-color: inherit;
-  padding: 0;
-  margin-left: 0;
-}
-
-label.wine {
-  padding-top: 60px;
-}
-
-input.cocktail-ingredient {
-  display: block;
-  width: 90%
-}
-
-.checkbox-button {
-  height: 140px;
-  width: 50%;
-}
-
 .submit-button {
   font-size: 20px;
   margin: 10px auto;
@@ -152,20 +104,44 @@ input.cocktail-ingredient {
   padding: 100px 20px 0 20px;
 }
 
-img.recipe-img {
+img.recipe-img, img.cocktail-img {
   width: 200px;
   display: block;
-  margin: 10px 0 20px 0;
+  margin: 10px 0;
 }
 
-li.recipe-result {
+li.recipe-result, li.cocktail-result {
   font-size: 22px;
+  font-weight: bold;
   list-style: none;
+  padding-top: 20px;
 }
 
-.recipe-result a:link {
+.recipe-result a:link, .cocktail-result a:link {
   text-decoration: none;
   color: black;
+}
+
+.recipe-result a:hover, .cocktail-result a:hover {
+  font-weight: bold;
+}
+
+button.wp {
+  display: block;
+  margin: 0;
+  font-size: 20px;
+  font-weight: normal;
+}
+
+.general-pairing {
+  border: 1px solid lightslategray;
+  padding: 0 10px;
+  border-radius: 4px;
+}
+
+.wpt p {
+  font-weight: normal;
+  font-size: 18px;
 }
 
 @media screen and (min-width: 50em) {

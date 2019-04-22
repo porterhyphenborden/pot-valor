@@ -22,10 +22,23 @@ function handleNewSearch() {
               <input type="text" name="dish" placeholder="quiche" id="dish">
               <label for="cuisine">Cuisine:</label>
               <select name="cuisine" id="cuisine">
-                  <option></option>
-                  <option value="american">American</option>
-                  <option value="chinese">Chinese</option>
-                  <option value="indian">Indian</option>
+                <option></option>
+                <option value="african">African</option>
+                <option value="cajun">Cajun</option>
+                <option value="caribbean">Caribbean</option>
+                <option value="chinese">Chinese</option>
+                <option value="french">French</option>
+                <option value="greek">Greek</option>
+                <option value="indian">Indian</option>
+                <option value="italian">Italian</option>
+                <option value="japanese">Japanese</option>
+                <option value="korean">Korean</option>
+                <option value="mexican">Mexican</option>
+                <option value="middle eastern">Middle Eastern</option>
+                <option value="southern">Southern</option>
+                <option value="spanish">Spanish</option>
+                <option value="thai">Thai</option>
+                <option value="vietnamese">Vietnamese</option>
               </select>
               <label for="ingredients">Ingredients:<br>(Please separate items by a comma.)</label>
               <input type="text" name="ingredients" placeholder="bacon" id="ingredients">
@@ -33,9 +46,10 @@ function handleNewSearch() {
               <label for="diet">Filter by diet:</label>
               <select name="diet" id="diet">
                   <option></option>
+                  <option value="paleo">Paleo</option>
+                  <option value="pescetarian">Pescetarian</option>
                   <option value="vegan">Vegan</option>
                   <option value="vegetarian">Vegetarian</option>
-                  <option value="paleo">Paleo</option>
               </select>
         </fieldset>
         <input type="submit" class="submit-button" value="Get cooking">
@@ -338,20 +352,35 @@ function start() {
               <input type="text" name="dish" placeholder="quiche" id="dish">
               <label for="cuisine">Cuisine:</label>
               <select name="cuisine" id="cuisine">
-                  <option></option>
-                  <option value="american">American</option>
-                  <option value="chinese">Chinese</option>
-                  <option value="indian">Indian</option>
+                <option></option>
+                <option value="african">African</option>
+                <option value="cajun">Cajun</option>
+                <option value="caribbean">Caribbean</option>
+                <option value="chinese">Chinese</option>
+                <option value="french">French</option>
+                <option value="greek">Greek</option>
+                <option value="indian">Indian</option>
+                <option value="italian">Italian</option>
+                <option value="japanese">Japanese</option>
+                <option value="korean">Korean</option>
+                <option value="latin american">Latin American</option>
+                <option value="mexican">Mexican</option>
+                <option value="middle eastern">Middle Eastern</option>
+                <option value="southern">Southern</option>
+                <option value="spanish">Spanish</option>
+                <option value="thai">Thai</option>
+                <option value="vietnamese">Vietnamese</option>
               </select>
               <label for="ingredients">Ingredients:<br>(Please separate items by a comma.)</label>
               <input type="text" name="ingredients" placeholder="bacon" id="ingredients">
             </fieldset>
               <label for="diet">Filter by diet:</label>
               <select name="diet" id="diet">
-                  <option></option>
-                  <option value="vegan">Vegan</option>
-                  <option value="vegetarian">Vegetarian</option>
-                  <option value="paleo">Paleo</option>
+              <option></option>
+              <option value="paleo">Paleo</option>
+              <option value="pescetarian">Pescetarian</option>
+              <option value="vegan">Vegan</option>
+              <option value="vegetarian">Vegetarian</option>
               </select>
         </fieldset>
         <input type="submit" class="submit-button" value="Get cooking">

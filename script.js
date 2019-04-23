@@ -22,35 +22,52 @@ function handleNewSearch() {
               <input type="text" name="dish" placeholder="quiche" id="dish">
               <label for="cuisine">Cuisine:</label>
               <select name="cuisine" id="cuisine">
-                <option></option>
-                <option value="african">African</option>
-                <option value="cajun">Cajun</option>
-                <option value="caribbean">Caribbean</option>
-                <option value="chinese">Chinese</option>
-                <option value="french">French</option>
-                <option value="greek">Greek</option>
-                <option value="indian">Indian</option>
-                <option value="italian">Italian</option>
-                <option value="japanese">Japanese</option>
-                <option value="korean">Korean</option>
-                <option value="mexican">Mexican</option>
-                <option value="middle eastern">Middle Eastern</option>
-                <option value="southern">Southern</option>
-                <option value="spanish">Spanish</option>
-                <option value="thai">Thai</option>
-                <option value="vietnamese">Vietnamese</option>
+                  <option></option>
+                  <option value="african">African</option>
+                  <option value="american">American</option>
+                  <option value="cajun">Cajun</option>
+                  <option value="caribbean">Caribbean</option>
+                  <option value="chinese">Chinese</option>
+                  <option value="eastern european">Eastern European</option>
+                  <option value="french">French</option>
+                  <option value="greek">Greek</option>
+                  <option value="indian">Indian</option>
+                  <option value="italian">Italian</option>
+                  <option value="japanese">Japanese</option>
+                  <option value="korean">Korean</option>
+                  <option value="latin american">Latin American</option>
+                  <option value="mexican">Mexican</option>
+                  <option value="middle eastern">Middle Eastern</option>
+                  <option value="southern">Southern</option>
+                  <option value="spanish">Spanish</option>
+                  <option value="thai">Thai</option>
+                  <option value="vietnamese">Vietnamese</option>
               </select>
               <label for="ingredients">Ingredients:<br>(Please separate items by a comma.)</label>
               <input type="text" name="ingredients" placeholder="bacon" id="ingredients">
             </fieldset>
-              <label for="diet">Filter by diet:</label>
+            <fieldset>
+              <legend>Filter by:</legend>
+              <label for="diet">Diet:</label>
               <select name="diet" id="diet">
                   <option></option>
-                  <option value="paleo">Paleo</option>
-                  <option value="pescetarian">Pescetarian</option>
                   <option value="vegan">Vegan</option>
                   <option value="vegetarian">Vegetarian</option>
+                  <option value="paleo">Paleo</option>
               </select>
+              <label for="course">Course:</label>
+              <select name="course" id="course">
+                  <option></option>
+                  <option value="main course">Main Course</option>
+                  <option value="side dish">Side Dish</option>
+                  <option value="dessert">Dessert</option>
+                  <option value="appetizer">Appetizer</option>
+                  <option value="salad">Salad</option>
+                  <option value="soup">Soup</option>
+                  <option value="sauce">Sauce</option>
+                  <option value="bread">Bread</option>
+              </select>
+            </fieldset>
         </fieldset>
         <input type="submit" class="submit-button" value="Get cooking">
       </form>`);
@@ -193,30 +210,39 @@ function getWine(wineURLArr) {
 //check responses for errors and set up html for results
 function checkStatus(cocktailResponse, foodResponse, wineURLArr) {
     console.log(foodResponse);
-    console.log(cocktailResponse);
-    if ((foodResponse.results.length != 0) && (cocktailResponse != null)) {
-        getWine(wineURLArr);
-        getResultsCocktail(cocktailResponse);
-        getResultsFood(foodResponse);
+    if (foodResponse) {
+        if ((foodResponse.results.length != 0) && (cocktailResponse)) {
+            getWine(wineURLArr);
+            getResultsCocktail(cocktailResponse);
+            getResultsFood(foodResponse);
+        }
     }
 }
 
 function cocktailError(err) {
-    console.log('Search returned no results');
-    $('body').prepend(`<div class="error-overlay"><h4>Your search for a cocktail returned no results. Try entering fewer ingredients.</h4>
-    <button class="return-search">Return to Search</button></div>`);
-    $('body').on('click', '.return-search', function(event) {
-        $('.error-overlay').css('display', 'none');
-    })
+    if (($('.error-overlay').length == 0) || ($('.error-overlay').is(':hidden'))) {
+        $('body').prepend(`<div class="error-overlay"><h4>Your search for a cocktail returned no results. Try entering fewer ingredients.</h4>
+        <button class="return-search">Return to Search</button></div>`);
+        $('body').on('click', '.return-search', function(event) {
+            $('.error-overlay').css('display', 'none');
+        })
+    }
+    else {
+        $('.error-overlay').prepend(`<h4>Your search for a cocktail returned no results. Try entering fewer ingredients.</h4>`);
+    }
 }
 
 function foodError(err) {
-    console.log('Search returned no results');
-    $('body').prepend(`<div class="error-overlay"><h4>Your search for a recipe returned no results. Try entering fewer parameters.</h4>
-    <button class="return-search">Return to Search</button></div>`);
-    $('body').on('click', '.return-search', function(event) {
-        $('.error-overlay').css('display', 'none');
-    });
+    if (($('.error-overlay').length == 0) || ($('.error-overlay').is(':hidden'))) {
+        $('body').prepend(`<div class="error-overlay"><h4>Your search for a recipe returned no results. Try entering fewer parameters.</h4>
+        <button class="return-search">Return to Search</button></div>`);
+        $('body').on('click', '.return-search', function(event) {
+            $('.error-overlay').css('display', 'none');
+        });
+    }
+    else {
+        $('.error-overlay').prepend(`<h4>Your search for a recipe returned no results. Try entering fewer parameters.</h4>`);
+    }
 }
 
 function getAll(cocktailDBURL, foodURL, wineURLArr) {
@@ -369,36 +395,52 @@ function start() {
               <input type="text" name="dish" placeholder="quiche" id="dish">
               <label for="cuisine">Cuisine:</label>
               <select name="cuisine" id="cuisine">
-                <option></option>
-                <option value="african">African</option>
-                <option value="cajun">Cajun</option>
-                <option value="caribbean">Caribbean</option>
-                <option value="chinese">Chinese</option>
-                <option value="french">French</option>
-                <option value="greek">Greek</option>
-                <option value="indian">Indian</option>
-                <option value="italian">Italian</option>
-                <option value="japanese">Japanese</option>
-                <option value="korean">Korean</option>
-                <option value="latin american">Latin American</option>
-                <option value="mexican">Mexican</option>
-                <option value="middle eastern">Middle Eastern</option>
-                <option value="southern">Southern</option>
-                <option value="spanish">Spanish</option>
-                <option value="thai">Thai</option>
-                <option value="vietnamese">Vietnamese</option>
+                  <option></option>
+                  <option value="african">African</option>
+                  <option value="american">American</option>
+                  <option value="cajun">Cajun</option>
+                  <option value="caribbean">Caribbean</option>
+                  <option value="chinese">Chinese</option>
+                  <option value="eastern european">Eastern European</option>
+                  <option value="french">French</option>
+                  <option value="greek">Greek</option>
+                  <option value="indian">Indian</option>
+                  <option value="italian">Italian</option>
+                  <option value="japanese">Japanese</option>
+                  <option value="korean">Korean</option>
+                  <option value="latin american">Latin American</option>
+                  <option value="mexican">Mexican</option>
+                  <option value="middle eastern">Middle Eastern</option>
+                  <option value="southern">Southern</option>
+                  <option value="spanish">Spanish</option>
+                  <option value="thai">Thai</option>
+                  <option value="vietnamese">Vietnamese</option>
               </select>
               <label for="ingredients">Ingredients:<br>(Please separate items by a comma.)</label>
               <input type="text" name="ingredients" placeholder="bacon" id="ingredients">
             </fieldset>
-              <label for="diet">Filter by diet:</label>
+            <fieldset>
+              <legend>Filter by:</legend>
+              <label for="diet">Diet:</label>
               <select name="diet" id="diet">
-              <option></option>
-              <option value="paleo">Paleo</option>
-              <option value="pescetarian">Pescetarian</option>
-              <option value="vegan">Vegan</option>
-              <option value="vegetarian">Vegetarian</option>
+                  <option></option>
+                  <option value="vegan">Vegan</option>
+                  <option value="vegetarian">Vegetarian</option>
+                  <option value="paleo">Paleo</option>
               </select>
+              <label for="course">Course:</label>
+              <select name="course" id="course">
+                  <option></option>
+                  <option value="main course">Main Course</option>
+                  <option value="side dish">Side Dish</option>
+                  <option value="dessert">Dessert</option>
+                  <option value="appetizer">Appetizer</option>
+                  <option value="salad">Salad</option>
+                  <option value="soup">Soup</option>
+                  <option value="sauce">Sauce</option>
+                  <option value="bread">Bread</option>
+              </select>
+            </fieldset>
         </fieldset>
         <input type="submit" class="submit-button" value="Get cooking">
       </form>`);

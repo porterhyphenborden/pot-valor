@@ -82,6 +82,7 @@ function displayResultsWine(responseJson, searchTerm) {
 
 //display food recipes
 function displayResultFood(responseJson) {
+    console.log(responseJson);
     $('.food-results-list').append(`
     <li class="recipe-result ${responseJson.id}">
         <a href="${responseJson.sourceUrl}" target="_blank">${responseJson.title}</a>
@@ -110,16 +111,24 @@ function displayResultFood(responseJson) {
 
 
 //make API call for food recipes by ID
-function getResultsFood(responseJson) {
+function getResultsFood(foodResponse, wineURLArr) {
+    console.log(foodResponse);
+    $('form.search-parameters').css('display', 'none');
+    $('main').append(`
+        <h2>Here are your recipes:</h2>
+        <ul class="food-results-list">
+        </ul>
+        <button class="new-search">New Search</button>
+    `);
     //for each recipe, make a call to the API for the recipe details
     const options = {
         headers: new Headers({
             'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
             'X-RapidAPI-Key': '9413d6f098mshb7f33766748b78fp1c7ff4jsn8633802ef568'})
         };
-    for (let i = 0; i < responseJson.results.length; i++) {
+    for (let i = 0; i < foodResponse.results.length; i++) {
         let recipeURL = (spoonURL + 'recipes/');
-        recipeURL += (`${responseJson.results[i].id}` + '/information');
+        recipeURL += (`${foodResponse.results[i].id}` + '/information');
         fetch(recipeURL, options)
         .then(response => response.json())
         .then(
@@ -131,17 +140,10 @@ function getResultsFood(responseJson) {
     handleNewSearch();
 }
 
-function cocktailError(err) {
-    console.log('Search returned no results');
-    $('body').prepend(`<div class="error-overlay"><h4>Your search for a cocktail returned no results. Try entering fewer ingredients.</h4>
-    <button class="return-search">Return to Search</button></div>`);
-    $('body').on('click', '.return-search', function(event) {
-        $('.error-overlay').css('display', 'none');
-    })
-}
 
 //make API calls for cocktail recipes by ID
 function getResultsCocktail(responseJson) {
+    console.log(responseJson);
     $('main').prepend(`
     <h2>Have a cocktail while you cook:</h2>
     <ul class="cocktail-results-list"></ul>`);
@@ -167,39 +169,16 @@ function checkStatusWine(responseJson, searchTerm) {
     }
 }
 
-//check resonse for food recipes for errors and set up html for results
-function checkStatusFood(responseJson) {
-    if (responseJson.results.length != 0) {
-        $('form.search-parameters').css('display', 'none')
-        $('main').append(`
-        <h2>Here are your recipes:</h2>
-        <ul class="food-results-list">
-        </ul>
-        <button class="new-search">New Search</button>
-        `)
-        getResultsFood(responseJson);
-    }
-    else if (responseJson.results.length == 0) {
-        console.log('Search returned no results');
-        $('body').prepend(`<div class="error-overlay"><h4>Your search for a recipe returned no results. Try entering fewer parameters.</h4>
-        <button class="return-search">Return to Search</button></div>`);
-        $('body').on('click', '.return-search', function(event) {
-            $('.error-overlay').css('display', 'none');
-        })
-    }
-}
-
 //make call to Spoonaculur for wine pairing
-function getWine(wineArrURL, searchTermsArr) {
-    console.log(searchTermsArr);
+function getWine(wineURLArr) {
     const options = {
         headers: new Headers({
             'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
             'X-RapidAPI-Key': '9413d6f098mshb7f33766748b78fp1c7ff4jsn8633802ef568'})
         };
-    for (let i = 0; i < wineArrURL.length; i++) {
-        let searchTerm = searchTermsArr[i];
-        fetch(wineArrURL[i], options)
+    for (let i = 0; i < wineURLArr[0].length; i++) {
+        let searchTerm = wineURLArr[1][i];
+        fetch(wineURLArr[0][i], options)
         .then(response => response.json())
         .then(
             function(responseJson) {
@@ -210,25 +189,45 @@ function getWine(wineArrURL, searchTermsArr) {
     }
 }
 
-//make call to Spoonacular for food recipes
-function getFood(foodURL) {
+
+//check responses for errors and set up html for results
+function checkStatus(cocktailResponse, foodResponse, wineURLArr) {
+    console.log(foodResponse);
+    console.log(cocktailResponse);
+    if ((foodResponse.results.length != 0) && (cocktailResponse != null)) {
+        getWine(wineURLArr);
+        getResultsCocktail(cocktailResponse);
+        getResultsFood(foodResponse);
+    }
+}
+
+function cocktailError(err) {
+    console.log('Search returned no results');
+    $('body').prepend(`<div class="error-overlay"><h4>Your search for a cocktail returned no results. Try entering fewer ingredients.</h4>
+    <button class="return-search">Return to Search</button></div>`);
+    $('body').on('click', '.return-search', function(event) {
+        $('.error-overlay').css('display', 'none');
+    })
+}
+
+function foodError(err) {
+    console.log('Search returned no results');
+    $('body').prepend(`<div class="error-overlay"><h4>Your search for a recipe returned no results. Try entering fewer parameters.</h4>
+    <button class="return-search">Return to Search</button></div>`);
+    $('body').on('click', '.return-search', function(event) {
+        $('.error-overlay').css('display', 'none');
+    });
+}
+
+function getAll(cocktailDBURL, foodURL, wineURLArr) {
+    console.log(wineURLArr);
     const options = {
         headers: new Headers({
             'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
             'X-RapidAPI-Key': '9413d6f098mshb7f33766748b78fp1c7ff4jsn8633802ef568'})
         };
-    fetch(foodURL, options)
-        .then(response => response.json())
-        .then(
-            function(responseJson) {
-                checkStatusFood(responseJson);
-            }
-        )
-}
 
-//make call to CocktailDB for cocktail recipe
-function getCocktail(cocktailDBURL) {
-    fetch(cocktailDBURL)
+    let cocktailRequest = (fetch(cocktailDBURL)
         .then(
             function(response) {
                 if (response != null) {
@@ -237,14 +236,31 @@ function getCocktail(cocktailDBURL) {
                 throw "returned no results";
             }
         )
-        .then(
-            function(responseJson) {
-                getResultsCocktail(responseJson);
-            }
-        )
         .catch(err => {
             cocktailError(err);
         })
+    );
+
+    let foodRequest = (fetch(foodURL, options)
+        .then(response => response.json())
+        .then(function(responseJson) {
+            if (responseJson.results.length != 0) {
+                return responseJson;
+            }
+            throw "returned no results";
+        })
+        .catch(err => {
+            foodError(err);
+        })
+    );
+    
+    Promise.all([cocktailRequest, foodRequest]).then(function(values) {
+        console.log(wineURLArr);
+        let cocktailResponse = values[0];
+        let foodResponse = values[1];
+        console.log(foodResponse);
+        checkStatus(cocktailResponse, foodResponse, wineURLArr);
+    });
 }
 
 //build URL for call to CocktailDB for cocktail recipe
@@ -256,13 +272,14 @@ function buildCocktailURL(cocktailIng) {
         let cocktailIngString = cocktailIngItemsEnc.join(',');
         let cocktailDBURL = ('https://www.thecocktaildb.com/api/json/v2/8673533/filter.php?i=' + cocktailIngString);
         console.log(cocktailDBURL);
-        getCocktail(cocktailDBURL);
+        return cocktailDBURL;
     }
 }
 
 //build URL for call to Spoonaculur for wine pairing
 function buildWineURL(dish, cuisine, ingredients) {
     let spoonURLWine = (spoonURL + 'food/wine/pairing?maxPrice=50&');
+    const combinedArr = [];
     const wineArrURL = [];
     const searchTermsArr = [];
     if (dish != '') {
@@ -286,8 +303,10 @@ function buildWineURL(dish, cuisine, ingredients) {
             wineArrURL.push(items[i]);
         }
     }
-    console.log(wineArrURL);
-    getWine(wineArrURL, searchTermsArr)
+    combinedArr.push(wineArrURL);
+    combinedArr.push(searchTermsArr);
+    console.log(combinedArr);
+    return combinedArr;
 }
 
 //build URL for call to Spoonaculur for food recipes
@@ -318,11 +337,9 @@ function buildURLs() {
     const diet = $('#diet').val();
     const cocktailIng = $('#cocktail').val();
     let foodURL = buildFoodURL(dish, cuisine, ingredients, diet);
-    let wineURL = buildWineURL(dish, cuisine, ingredients);
+    let wineURLArr = buildWineURL(dish, cuisine, ingredients);
     let cocktailURL = buildCocktailURL(cocktailIng);
-    getFood(foodURL);
-    getWine(wineURL);
-    getCocktail(cocktailURL);
+    getAll(cocktailURL, foodURL, wineURLArr);
 }
 
 //listen for user to submit search parameters

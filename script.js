@@ -75,9 +75,9 @@ function handleNewSearch() {
     })
 }
 
-//display cocktail recipes
+//display each cocktail
 function displayResultsCocktail(responseJson) {
-    $('.cocktail-results-list').append(`
+    $('.cocktail-results-list').prepend(`
         <li class="cocktail-result">
             <a href="https://www.thecocktaildb.com/drink.php?c=${responseJson.drinks[0].idDrink}" target="_blank">${responseJson.drinks[0].strDrink}</a>
             <a href="https://www.thecocktaildb.com/drink.php?c=${responseJson.drinks[0].idDrink}" target="_blank">
@@ -129,30 +129,19 @@ function displayResultFood(responseJson) {
     console.log(`end insert for ${responseJson.id}`);
 }
 
-function handleSeeMore(foodResponse, displayNum) {
-    console.log('handleSeeMore ran');
-    $('main').on('click', '.see-more', function(event) {
-        $('.food-results-list').empty();
-        displayNum += 5;
-        console.log(displayNum);
-        getResultsFood(foodResponse, displayNum);
-    });
-}
-
-
 //make API call for food recipes by ID
-function getResultsFood(foodResponse, displayNum) {
+function getResultsFood(foodResponse, displayNumFood) {
     console.log('getResultsFood ran');
-    console.log(displayNum);
+    console.log(displayNumFood);
     //for each recipe, make a call to the API for the recipe details
     const options = {
         headers: new Headers({
             'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
             'X-RapidAPI-Key': '9413d6f098mshb7f33766748b78fp1c7ff4jsn8633802ef568'})
         };
-    for (let i = (displayNum - 5); ((i < foodResponse.results.length) && (i < displayNum)); i++) {
+    for (let i = (displayNumFood - 5); ((i < foodResponse.results.length) && (i < displayNumFood)); i++) {
         console.log(i);
-        console.log(displayNum);
+        console.log(displayNumFood);
         let recipeURL = (spoonURL + 'recipes/');
         recipeURL += (`${foodResponse.results[i].id}` + '/information');
         fetch(recipeURL, options)
@@ -167,10 +156,10 @@ function getResultsFood(foodResponse, displayNum) {
 
 
 //make API calls for cocktail recipes by ID
-function getResultsCocktail(responseJson) {
+function getResultsCocktail(responseJson, displayNumCocktail) {
     console.log(responseJson);
     //for each recipe, make a call to the API for the recipe details
-    for (let i = 0; i < responseJson.drinks.length && i<4; i++) {
+    for (let i = (displayNumCocktail - 5); ((i < responseJson.drinks.length) && (i < displayNumCocktail) && (i < 20)); i++) {
         let recipeURL = 'https://www.thecocktaildb.com/api/json/v2/8673533/lookup.php?i=';
         recipeURL += (`${responseJson.drinks[i].idDrink}`);
         fetch(recipeURL)
@@ -181,6 +170,82 @@ function getResultsCocktail(responseJson) {
             }
         )
     }
+    window.scrollTo(0, 0);
+}
+
+//handle user clicks to see next or previous results for food
+function handleNavFood(foodResponse, displayNumFood) {
+    console.log('handleSeeMore ran');
+    $('main').on('click', '.see-more-food', function(event) {
+        $('.food-results-list').empty();
+        displayNumFood += 5;
+        console.log(displayNumFood);
+        if (displayNumFood >= 20) {
+            $('.see-more-food').css('display', 'none');
+        }
+        else if (displayNumFood <= 5) {
+            $('.see-previous-food').css('display', 'none');
+        }
+        else {
+            $('.see-previous-food').css('display', 'block');
+            $('.see-more-food').css('display', 'block');
+        }
+        getResultsFood(foodResponse, displayNumFood);
+    });
+    $('main').on('click', '.see-previous-food', function(event) {
+        console.log('handleSeePreviousFood ran');
+        displayNumFood -= 5;
+        $('.food-results-list').empty();
+        console.log(displayNumFood);
+        if (displayNumFood >= 20) {
+            $('.see-more-food').css('display', 'none');
+        }
+        else if (displayNumFood <= 5) {
+            $('.see-previous-food').css('display', 'none');
+        }
+        else {
+            $('.see-previous-food').css('display', 'block');
+            $('.see-more-food').css('display', 'block');
+        }  
+        getResultsFood(foodResponse, displayNumFood);
+    });
+}
+
+//handle user clicks to see next or previous results for cocktails
+function handleNavCocktails(cocktailResponse, displayNumCocktail) {
+    console.log('handleSeeMoreCocktails ran');
+    $('main').on('click', '.see-more-cocktails', function(event) {
+        $('.cocktail-results-list').empty();
+        displayNumCocktail += 5;
+        console.log(displayNumCocktail);
+        if (displayNumCocktail >= 20) {
+            $('.see-more-cocktails').css('display', 'none');
+        }
+        else if (displayNumCocktail <= 5) {
+            $('.see-previous-cocktails').css('display', 'none');
+        }
+        else {
+            $('.see-previous-cocktails').css('display', 'block');
+            $('.see-more-cocktails').css('display', 'block');
+        }
+        getResultsCocktail(cocktailResponse, displayNumCocktail);
+    });
+    $('main').on('click', '.see-previous-cocktails', function(event) {
+        $('.cocktail-results-list').empty();
+        displayNumCocktail -= 5;
+        console.log(displayNumCocktail);
+        if (displayNumCocktail >= 20) {
+            $('.see-more-cocktails').css('display', 'none');
+        }
+        else if (displayNumCocktail <= 5) {
+            $('.see-previous-cocktails').css('display', 'none');
+        }
+        else {
+            $('.see-previous-cocktails').css('display', 'block');
+            $('.see-more-cocktails').css('display', 'block');
+        }
+        getResultsCocktail(cocktailResponse, displayNumCocktail);
+    });
 }
 
 //set up html for displaying results
@@ -189,20 +254,27 @@ function setUpResultsDisplay(foodResponse, cocktailResponse) {
     $('main').append(`
         <h2>Have a cocktail while you cook:</h2>
         <ul class="cocktail-results-list"></ul>
+        <button class="see-previous-cocktails">See Previous</button>
+        <button class="see-more-cocktails">See More</button>
         <h2>Here are your recipes:</h2>
         <ul class="food-results-list">
         </ul>
-        <button class="see-more">See More</button>
+        <button class="see-previous-food">See Previous</button>
+        <button class="see-more-food">See More</button>
         <button class="new-search">New Search</button>
     `);
-    let displayNum = 5;
-    getResultsCocktail(cocktailResponse);
-    getResultsFood(foodResponse, displayNum);
-    handleSeeMore(foodResponse, displayNum);
+    $('.see-previous-cocktails').css('display', 'none');
+    $('.see-previous-food').css('display', 'none');
+    let displayNumFood = 5;
+    let displayNumCocktail = 5;
+    getResultsCocktail(cocktailResponse, displayNumCocktail);
+    getResultsFood(foodResponse, displayNumFood);
+    handleNavCocktails(cocktailResponse, displayNumCocktail);
+    handleNavFood(foodResponse, displayNumFood);
     handleNewSearch();
 }
 
-//check resonse for food recipes for errors
+//check response for wine pairings
 function checkStatusWine(responseJson, searchTerm) {
     if (responseJson.pairedWines.length != 0) {
         console.log(searchTerm);
@@ -231,19 +303,18 @@ function getWine(wineURLArr) {
 }
 
 
-//check responses for errors and set up html for results
+//check responses and proceed with display if valid
 function checkStatus(cocktailResponse, foodResponse, wineURLArr) {
     console.log(foodResponse);
     if (foodResponse) {
         if ((foodResponse.results.length != 0) && (cocktailResponse)) {
             getWine(wineURLArr);
             setUpResultsDisplay(foodResponse, cocktailResponse);
-            // getResultsCocktail(cocktailResponse);
-            // getResultsFood(foodResponse);
         }
     }
 }
 
+//display error message
 function cocktailError(err) {
     if (($('.error-overlay').length == 0) || ($('.error-overlay').is(':hidden'))) {
         $('body').prepend(`<div class="error-overlay"><h4>Your search for a cocktail returned no results. Try entering fewer ingredients.</h4>
@@ -257,6 +328,7 @@ function cocktailError(err) {
     }
 }
 
+//display error message
 function foodError(err) {
     if (($('.error-overlay').length == 0) || ($('.error-overlay').is(':hidden'))) {
         $('body').prepend(`<div class="error-overlay"><h4>Your search for a recipe returned no results. Try entering fewer parameters.</h4>
@@ -270,6 +342,7 @@ function foodError(err) {
     }
 }
 
+//make API calls for cocktails and food recipes
 function getAll(cocktailDBURL, foodURL, wineURLArr) {
     console.log(wineURLArr);
     const options = {
@@ -391,10 +464,12 @@ function buildURLs() {
     const diet = $('#diet').val();
     const course = $('#course').val();
     const cocktailIng = $('#cocktail').val();
-    let foodURL = buildFoodURL(dish, cuisine, ingredients, diet, course);
-    let wineURLArr = buildWineURL(dish, cuisine, ingredients);
-    let cocktailURL = buildCocktailURL(cocktailIng);
-    getAll(cocktailURL, foodURL, wineURLArr);
+    if (((dish != '') || (cuisine != '') || (ingredients != '')) && (cocktailIng != '')) {
+        let foodURL = buildFoodURL(dish, cuisine, ingredients, diet, course);
+        let wineURLArr = buildWineURL(dish, cuisine, ingredients);
+        let cocktailURL = buildCocktailURL(cocktailIng);
+        getAll(cocktailURL, foodURL, wineURLArr);
+    }
 }
 
 //listen for user to submit search parameters

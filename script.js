@@ -8,54 +8,66 @@ function handleNewSearch() {
     $('body').on('click', 'button.new-search', function(event) {
         $('main').html(`
         <form class="search-parameters">
-        <h2>Search for Recipes</h2>
-        <fieldset name="cocktail-search">
-            <legend>The important stuff:</legend>
-            <label for="cocktail">Find me a cocktail with:<br>(Please separate items by a comma.)</label>
-            <input type="text" name="cocktail" placeholder="tequila" id="cocktail">
-        </fieldset>
-        <fieldset name="food-search">
-            <legend>Oh and also, let's eat something:</legend>
-            <fieldset name="required-parameters">
-                <legend>Search by (at least of one the following):</legend>
+      <h2>Search for Recipes</h2>
+      <fieldset name="cocktail-search">
+        <legend>The important stuff:</legend>
+        <label for="cocktail">Find me a cocktail with:<br>(Please separate items by a comma.)</label>
+        <input type="text" name="cocktail" placeholder="tequila" id="cocktail">
+      </fieldset>
+      <fieldset name="food-search">
+          <legend>Oh and also, let's eat something:</legend>
+          <fieldset name="required-parameters" class="required-parameters">
+            <legend class="sub-legend">Search by (at least of one the following):</legend>
+            <div class="filter-container required">
+              <div class="filter-box required">
                 <label for="dish">Dish:</label>
                 <input type="text" name="dish" placeholder="quiche" id="dish">
+              </div>
+              <div class="filter-box required">
                 <label for="cuisine">Cuisine:</label>
                 <select name="cuisine" id="cuisine">
                     <option></option>
-                    <option value="African">African</option>
-                    <option value="American">American</option>
-                    <option value="Cajun">Cajun</option>
-                    <option value="Caribbean">Caribbean</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="Eastern european">Eastern European</option>
-                    <option value="French">French</option>
-                    <option value="Greek">Greek</option>
-                    <option value="Indian">Indian</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Korean">Korean</option>
-                    <option value="Latin American">Latin American</option>
-                    <option value="Mexican">Mexican</option>
-                    <option value="Middle Eastern">Middle Eastern</option>
-                    <option value="Southern">Southern</option>
-                    <option value="Spanish">Spanish</option>
-                    <option value="Thai">Thai</option>
-                    <option value="Vietnamese">Vietnamese</option>
+                    <option value="african">African</option>
+                    <option value="american">American</option>
+                    <option value="cajun">Cajun</option>
+                    <option value="caribbean">Caribbean</option>
+                    <option value="chinese">Chinese</option>
+                    <option value="eastern european">Eastern European</option>
+                    <option value="french">French</option>
+                    <option value="greek">Greek</option>
+                    <option value="indian">Indian</option>
+                    <option value="italian">Italian</option>
+                    <option value="japanese">Japanese</option>
+                    <option value="korean">Korean</option>
+                    <option value="latin american">Latin American</option>
+                    <option value="mexican">Mexican</option>
+                    <option value="middle eastern">Middle Eastern</option>
+                    <option value="southern">Southern</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="thai">Thai</option>
+                    <option value="vietnamese">Vietnamese</option>
                 </select>
-                <label for="ingredients">Ingredients:<br>(Please separate items by a comma.)</label>
+              </div>
+              <div class="filter-box required">
+                <label for="ingredients">Ingredients (separate by comma):</label>
                 <input type="text" name="ingredients" placeholder="bacon" id="ingredients">
-            </fieldset>
-            <fieldset>
-                <legend>Filter by:</legend>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset name="filters" class="optional-parameters">
+            <legend class="sub-legend">Filter by:</legend>
+            <div class="filter-container">
+              <div class="filter-box">
                 <label for="diet">Diet:</label>
                 <select name="diet" id="diet">
                     <option></option>
                     <option value="paleo">Paleo</option>
                     <option value="pescetarian">Pescetarian</option>
-                    <option value="vegan">Vegan</option>
+                    <option value="vegan">Vegan</option><
                     <option value="vegetarian">Vegetarian</option>
                 </select>
+              </div>
+              <div class="filter-box">
                 <label for="course">Course:</label>
                 <select name="course" id="course">
                     <option></option>
@@ -68,10 +80,12 @@ function handleNewSearch() {
                     <option value="sauce">Sauce</option>
                     <option value="bread">Bread</option>
                 </select>
-            </fieldset>
-        </fieldset>
-        <input type="submit" class="submit-button" value="Get cooking">
-      </form>`);
+              </div>
+            </div>
+          </fieldset>
+      </fieldset>
+      <input type="submit" class="submit-button" value="Get cooking">
+    </form>`);
     })
 }
 
@@ -79,10 +93,10 @@ function handleNewSearch() {
 function displayResultsCocktail(responseJson) {
     $('.cocktail-results-list').prepend(`
         <li class="cocktail-result">
-            <a href="https://www.thecocktaildb.com/drink.php?c=${responseJson.drinks[0].idDrink}" target="_blank">${responseJson.drinks[0].strDrink}</a>
             <a href="https://www.thecocktaildb.com/drink.php?c=${responseJson.drinks[0].idDrink}" target="_blank">
                 <img src="${responseJson.drinks[0].strDrinkThumb}" class="cocktail-img">
             </a>
+            <a href="https://www.thecocktaildb.com/drink.php?c=${responseJson.drinks[0].idDrink}" target="_blank">${responseJson.drinks[0].strDrink}</a>
     `)
 }
 
@@ -108,7 +122,7 @@ function displayResultFood(responseJson) {
         <a href="${responseJson.sourceUrl}" target="_blank">${responseJson.title}</a>
     </li>`);
     if (responseJson.hasOwnProperty('image')) {
-        $(`li.${responseJson.id}`).append(`
+        $(`li.${responseJson.id}`).prepend(`
         <a href="${responseJson.sourceUrl}" target="_blank">
             <img src="${responseJson.image}" class="recipe-img">
         </a>`)
@@ -139,7 +153,7 @@ function getResultsFood(foodResponse, displayNumFood) {
             'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
             'X-RapidAPI-Key': '9413d6f098mshb7f33766748b78fp1c7ff4jsn8633802ef568'})
         };
-    for (let i = (displayNumFood - 5); ((i < foodResponse.results.length) && (i < displayNumFood)); i++) {
+    for (let i = (displayNumFood - 4); ((i < foodResponse.results.length) && (i < displayNumFood)); i++) {
         console.log(i);
         console.log(displayNumFood);
         let recipeURL = (spoonURL + 'recipes/');
@@ -152,6 +166,9 @@ function getResultsFood(foodResponse, displayNumFood) {
             }
         )
     }
+    $('html, body').animate({
+        scrollTop: ($('#food-results-list').offset().top)
+    },500);
 }
 
 
@@ -159,7 +176,7 @@ function getResultsFood(foodResponse, displayNumFood) {
 function getResultsCocktail(responseJson, displayNumCocktail) {
     console.log(responseJson);
     //for each recipe, make a call to the API for the recipe details
-    for (let i = (displayNumCocktail - 5); ((i < responseJson.drinks.length) && (i < displayNumCocktail) && (i < 20)); i++) {
+    for (let i = (displayNumCocktail - 4); ((i < responseJson.drinks.length) && (i < displayNumCocktail) && (i < 24)); i++) {
         let recipeURL = 'https://www.thecocktaildb.com/api/json/v2/8673533/lookup.php?i=';
         recipeURL += (`${responseJson.drinks[i].idDrink}`);
         fetch(recipeURL)
@@ -178,12 +195,12 @@ function handleNavFood(foodResponse, displayNumFood) {
     console.log('handleSeeMore ran');
     $('main').on('click', '.see-more-food', function(event) {
         $('.food-results-list').empty();
-        displayNumFood += 5;
+        displayNumFood += 4;
         console.log(displayNumFood);
-        if (displayNumFood >= 20) {
+        if (displayNumFood >= 24) {
             $('.see-more-food').css('display', 'none');
         }
-        else if (displayNumFood <= 5) {
+        else if (displayNumFood <= 4) {
             $('.see-previous-food').css('display', 'none');
         }
         else {
@@ -194,13 +211,13 @@ function handleNavFood(foodResponse, displayNumFood) {
     });
     $('main').on('click', '.see-previous-food', function(event) {
         console.log('handleSeePreviousFood ran');
-        displayNumFood -= 5;
+        displayNumFood -= 4;
         $('.food-results-list').empty();
         console.log(displayNumFood);
-        if (displayNumFood >= 20) {
+        if (displayNumFood >= 24) {
             $('.see-more-food').css('display', 'none');
         }
-        else if (displayNumFood <= 5) {
+        else if (displayNumFood <= 4) {
             $('.see-previous-food').css('display', 'none');
         }
         else {
@@ -216,12 +233,12 @@ function handleNavCocktails(cocktailResponse, displayNumCocktail) {
     console.log('handleSeeMoreCocktails ran');
     $('main').on('click', '.see-more-cocktails', function(event) {
         $('.cocktail-results-list').empty();
-        displayNumCocktail += 5;
+        displayNumCocktail += 4;
         console.log(displayNumCocktail);
-        if (displayNumCocktail >= 20) {
+        if (displayNumCocktail >= 24) {
             $('.see-more-cocktails').css('display', 'none');
         }
-        else if (displayNumCocktail <= 5) {
+        else if (displayNumCocktail <= 4) {
             $('.see-previous-cocktails').css('display', 'none');
         }
         else {
@@ -232,12 +249,12 @@ function handleNavCocktails(cocktailResponse, displayNumCocktail) {
     });
     $('main').on('click', '.see-previous-cocktails', function(event) {
         $('.cocktail-results-list').empty();
-        displayNumCocktail -= 5;
+        displayNumCocktail -= 4;
         console.log(displayNumCocktail);
-        if (displayNumCocktail >= 20) {
+        if (displayNumCocktail >= 24) {
             $('.see-more-cocktails').css('display', 'none');
         }
-        else if (displayNumCocktail <= 5) {
+        else if (displayNumCocktail <= 4) {
             $('.see-previous-cocktails').css('display', 'none');
         }
         else {
@@ -248,29 +265,54 @@ function handleNavCocktails(cocktailResponse, displayNumCocktail) {
     });
 }
 
+//handle toggle between cocktail and food recipes for small screens
+function handleToggle() {
+    $('main').on('click', '.dt-cocktail', function(event) {
+        $('.cocktail-results').show();
+        $('.food-results').hide();
+        $('.dt-cocktail').toggleClass('selected');
+        $('.dt-food').toggleClass('selected');
+    });
+    $('main').on('click', '.dt-food', function(event) {
+        $('.cocktail-results').hide();
+        $('.food-results').show();
+        $('.dt-cocktail').toggleClass('selected');
+        $('.dt-food').toggleClass('selected');
+    });
+}
+
 //set up html for displaying results
 function setUpResultsDisplay(foodResponse, cocktailResponse) {
     $('form.search-parameters').css('display', 'none');
     $('main').append(`
-        <h2>Have a cocktail while you cook:</h2>
-        <ul class="cocktail-results-list"></ul>
-        <button class="see-previous-cocktails">See Previous</button>
-        <button class="see-more-cocktails">See More</button>
-        <h2>Here are your recipes:</h2>
-        <ul class="food-results-list">
-        </ul>
-        <button class="see-previous-food">See Previous</button>
-        <button class="see-more-food">See More</button>
+        <div class="display-toggle">
+            <button class="dt-cocktail selected">COCKTAILS</button>
+            <button class="dt-food">RECIPES</button>
+        </div>
+        <div class="cocktail-results">
+            <h2>Have a cocktail while you cook:</h2>
+            <ul class="cocktail-results-list"></ul>
+            <button class="see-previous-cocktails">See Previous</button>
+            <button class="see-more-cocktails">See More</button>
+        </div>
+        <div class="food-results">
+            <h2>Here are your recipes:</h2>
+            <ul class="food-results-list" id="food-results-list">
+            </ul>
+            <button class="see-previous-food">See Previous</button>
+            <button class="see-more-food">See More</button>
+        </div>
         <button class="new-search">New Search</button>
     `);
     $('.see-previous-cocktails').css('display', 'none');
     $('.see-previous-food').css('display', 'none');
-    let displayNumFood = 5;
-    let displayNumCocktail = 5;
+    let displayNumFood = 4;
+    let displayNumCocktail = 4;
     getResultsCocktail(cocktailResponse, displayNumCocktail);
     getResultsFood(foodResponse, displayNumFood);
     handleNavCocktails(cocktailResponse, displayNumCocktail);
     handleNavFood(foodResponse, displayNumFood);
+    handleToggle();
     handleNewSearch();
 }
 
@@ -435,7 +477,7 @@ function buildWineURL(dish, cuisine, ingredients) {
 
 //build URL for call to Spoonaculur for food recipes
 function buildFoodURL(dish, cuisine, ingredients, diet, course) {
-    let spoonURLFood = (spoonURL + 'recipes/searchComplex?limitLicense=false&number=20');
+    let spoonURLFood = (spoonURL + 'recipes/searchComplex?limitLicense=false&number=24');
     if (dish != '') {
         spoonURLFood += ('&query=' + dish);
     }
@@ -493,69 +535,84 @@ function start() {
         </fieldset>
         <fieldset name="food-search">
             <legend>Oh and also, let's eat something:</legend>
-            <fieldset name="required-parameters">
-                <legend>Search by (at least of one the following):</legend>
-                <label for="dish">Dish:</label>
-                <input type="text" name="dish" placeholder="quiche" id="dish">
-                <label for="cuisine">Cuisine:</label>
-                <select name="cuisine" id="cuisine">
-                    <option></option>
-                    <option value="African">African</option>
-                    <option value="American">American</option>
-                    <option value="Cajun">Cajun</option>
-                    <option value="Caribbean">Caribbean</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="Eastern european">Eastern European</option>
-                    <option value="French">French</option>
-                    <option value="Greek">Greek</option>
-                    <option value="Indian">Indian</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Korean">Korean</option>
-                    <option value="Latin American">Latin American</option>
-                    <option value="Mexican">Mexican</option>
-                    <option value="Middle Eastern">Middle Eastern</option>
-                    <option value="Southern">Southern</option>
-                    <option value="Spanish">Spanish</option>
-                    <option value="Thai">Thai</option>
-                    <option value="Vietnamese">Vietnamese</option>
-                </select>
-                <label for="ingredients">Ingredients:<br>(Please separate items by a comma.)</label>
-                <input type="text" name="ingredients" placeholder="bacon" id="ingredients">
+            <fieldset name="required-parameters" class="required-parameters">
+                <legend class="sub-legend">Search by (at least of one the following):</legend>
+                <div class="filter-container required">
+                <div class="filter-box required">
+                    <label for="dish">Dish:</label>
+                    <input type="text" name="dish" placeholder="quiche" id="dish">
+                </div>
+                <div class="filter-box required">
+                    <label for="cuisine">Cuisine:</label>
+                    <select name="cuisine" id="cuisine">
+                        <option></option>
+                        <option value="african">African</option>
+                        <option value="american">American</option>
+                        <option value="cajun">Cajun</option>
+                        <option value="caribbean">Caribbean</option>
+                        <option value="chinese">Chinese</option>
+                        <option value="eastern european">Eastern European</option>
+                        <option value="french">French</option>
+                        <option value="greek">Greek</option>
+                        <option value="indian">Indian</option>
+                        <option value="italian">Italian</option>
+                        <option value="japanese">Japanese</option>
+                        <option value="korean">Korean</option>
+                        <option value="latin american">Latin American</option>
+                        <option value="mexican">Mexican</option>
+                        <option value="middle eastern">Middle Eastern</option>
+                        <option value="southern">Southern</option>
+                        <option value="spanish">Spanish</option>
+                        <option value="thai">Thai</option>
+                        <option value="vietnamese">Vietnamese</option>
+                    </select>
+                </div>
+                <div class="filter-box required">
+                    <label for="ingredients">Ingredients (separate by comma):</label>
+                    <input type="text" name="ingredients" placeholder="bacon" id="ingredients">
+                </div>
+                </div>
             </fieldset>
-            <fieldset>
-                <legend>Filter by:</legend>
-                <label for="diet">Diet:</label>
-                <select name="diet" id="diet">
-                    <option></option>
-                    <option value="paleo">Paleo</option>
-                    <option value="pescetarian">Pescetarian</option>
-                    <option value="vegan">Vegan</option>
-                    <option value="vegetarian">Vegetarian</option>
-                </select>
-                <label for="course">Course:</label>
-                <select name="course" id="course">
-                    <option></option>
-                    <option value="main course">Main Course</option>
-                    <option value="side dish">Side Dish</option>
-                    <option value="dessert">Dessert</option>
-                    <option value="appetizer">Appetizer</option>
-                    <option value="salad">Salad</option>
-                    <option value="soup">Soup</option>
-                    <option value="sauce">Sauce</option>
-                    <option value="bread">Bread</option>
-                </select>
+            <fieldset name="filters" class="optional-parameters">
+                <legend class="sub-legend">Filter by:</legend>
+                <div class="filter-container">
+                <div class="filter-box">
+                    <label for="diet">Diet:</label>
+                    <select name="diet" id="diet">
+                        <option></option>
+                        <option value="paleo">Paleo</option>
+                        <option value="pescetarian">Pescetarian</option>
+                        <option value="vegan">Vegan</option><
+                        <option value="vegetarian">Vegetarian</option>
+                    </select>
+                </div>
+                <div class="filter-box">
+                    <label for="course">Course:</label>
+                    <select name="course" id="course">
+                        <option></option>
+                        <option value="main course">Main Course</option>
+                        <option value="side dish">Side Dish</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="appetizer">Appetizer</option>
+                        <option value="salad">Salad</option>
+                        <option value="soup">Soup</option>
+                        <option value="sauce">Sauce</option>
+                        <option value="bread">Bread</option>
+                    </select>
+                </div>
+                </div>
             </fieldset>
         </fieldset>
         <input type="submit" class="submit-button" value="Get cooking">
-      </form>`);
-    $('header').addClass('smallbanner');
-    $('img.logo').addClass('smallbanner');
+        </form>`);
+        $('header').addClass('smallbanner');
+        $('h1').addClass('smallbanner');
+        $('img.logo').addClass('smallbanner');
+    })
     $('img.logo').on('click', function(event) {
         location.reload();
     })
     handleSubmit();
-    })
 }
 
 $(start);

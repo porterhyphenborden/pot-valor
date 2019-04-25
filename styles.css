@@ -21,7 +21,7 @@ header.smallbanner {
 
 img.logo {
   width: 200px;
-  /*change to 100 for other pages, change margins*/
+  margin-top: 5px;
 }
 
 img.smallbanner {
@@ -44,6 +44,13 @@ p {
   line-height: 28px;
 }
 
+ul {
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
 button {
   display: block;
   margin: 10px auto;
@@ -53,6 +60,11 @@ button {
 
 form {
   font-size: 18px;
+  margin: 0 auto;
+}
+
+select, input[type="text"] {
+  width: 90%;
 }
 
 input, label {
@@ -66,6 +78,12 @@ fieldset {
 
 legend {
   font-size: 24px;
+  float: left;
+  margin: 5px 0;
+}
+
+label {
+  clear: left;
 }
 
 .submit-button {
@@ -107,7 +125,7 @@ legend {
 img.recipe-img, img.cocktail-img {
   width: 200px;
   display: block;
-  margin: 10px 0;
+  margin: 10px;
 }
 
 li.recipe-result, li.cocktail-result {
@@ -144,10 +162,120 @@ button.wp {
   font-size: 18px;
 }
 
+.filter-container {
+  clear: left;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.filter-box {
+  margin-right: 20px;
+}
+
+fieldset.required-parameters {
+  clear: left;
+}
+
 @media screen and (min-width: 50em) {
-  body {
-    max-width: 60%;
+
+  form {
+    max-width: 80%;
+  }
+
+  .filter-box {
+    width: 30%;
+  }
+
+  input#cocktail {
+    width: 50%;
+  }
+
+  .display-toggle {
+    display: none;
+  }
+
+  p.greeting {
+    margin: 0 auto;
+    width: 60%;
+  }
+
+  li.recipe-result, li.cocktail-result {
+    width: 25%;
+  }
+
+}
+
+@media screen and (min-width: 70em) {
+  form {
+    max-width: 70%;
   }
 }
 
-@media screen and (max-width: 49em)
+@media screen and (max-width: 49em) {
+  h1 {
+    font-size: 28px;
+  }
+
+  h1.smallbanner {
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  img.logo {
+    width: 140px;
+  }
+
+  img.smallbanner {
+    width: 80px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+
+  legend {
+    font-size: 22px;
+  }
+
+  legend.sub-legend {
+    font-size: 18px;
+  }
+
+  label {
+    font-size: 16px;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .filter-container.required {
+    flex-direction: column;
+  }
+  
+  .display-toggle {
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+  }
+
+  .display-toggle button {
+    width: 50%;
+    margin: 0;
+  }
+
+  .selected {
+    background-color: purple;
+  }
+
+  .food-results {
+    display: none;
+  }
+
+}

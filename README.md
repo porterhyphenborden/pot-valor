@@ -43,8 +43,8 @@ Callie Porter-Borden
 
 ## Acknowledgments
 
-The CocktailDB
-Spoonacular
+* The CocktailDB
+* Spoonacular
 
 
 

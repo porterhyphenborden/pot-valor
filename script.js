@@ -9,12 +9,12 @@ function handleNewSearch() {
         $('main').html(`
         <form class="search-parameters">
       <h2>Search for Recipes</h2>
-      <fieldset name="cocktail-search">
+      <fieldset name="cocktail-search" class="cocktail-search">
         <legend>The important stuff:</legend>
         <label for="cocktail">Find me a cocktail with:<br>(Please separate items by a comma.)</label>
         <input type="text" name="cocktail" placeholder="tequila" id="cocktail">
       </fieldset>
-      <fieldset name="food-search">
+      <fieldset name="food-search" class="food-search">
           <legend>Oh and also, let's eat something:</legend>
           <fieldset name="required-parameters" class="required-parameters">
             <legend class="sub-legend">Search by (at least of one the following):</legend>
@@ -94,7 +94,7 @@ function displayResultsCocktail(responseJson) {
     $('.cocktail-results-list').prepend(`
         <li class="cocktail-result">
             <a href="https://www.thecocktaildb.com/drink.php?c=${responseJson.drinks[0].idDrink}" target="_blank">
-                <img src="${responseJson.drinks[0].strDrinkThumb}" class="cocktail-img">
+                <img src="${responseJson.drinks[0].strDrinkThumb}" class="cocktail-img" alt="${responseJson.drinks[0].strDrink}">
             </a>
             <div class="cocktail-title-wrapper">
                 <a class="cocktail-title" href="https://www.thecocktaildb.com/drink.php?c=${responseJson.drinks[0].idDrink}" target="_blank">${responseJson.drinks[0].strDrink}</a>
@@ -106,14 +106,17 @@ function displayResultsCocktail(responseJson) {
 function displayResultsWine(responseJson, searchTerm) {
     console.log(responseJson);
     console.log(searchTerm);
-    $('div.general-pairing').css('display', 'block');
+    $('div.general-pairing-top').html(`
+        <h3 class="general-pairing">General wine pairing advice for ${searchTerm}</h3>
+        <p class="general-pairing">${responseJson.pairingText}</p>
+    `);
     $('div.general-pairing').html(`
-        <h4 class="general-pairing">General wine pairing advice for ${searchTerm}</h4>
+        <h3 class="general-pairing">General wine pairing advice for ${searchTerm}</h3>
         <p class="general-pairing">${responseJson.pairingText}</p>
         <button class="view-general">View General Pairing Advice</button>
     `);
     $('body').on('click', `.view-general`, function(event) {
-        $(`h4.general-pairing`).html(`
+        $(`h3.general-pairing`).html(`
             General wine pairing advice for ${searchTerm}`);
         $(`p.general-pairing`).html(`
             ${responseJson.pairingText}`);
@@ -137,7 +140,7 @@ function displayResultFood(responseJson) {
     if (responseJson.hasOwnProperty('image')) {
         $(`div.${responseJson.id}`).prepend(`
         <a href="${responseJson.sourceUrl}" target="_blank">
-            <img src="${responseJson.image}" class="recipe-img">
+            <img src="${responseJson.image}" class="recipe-img" alt="${responseJson.title}">
         </a>`)
     }
     if ((responseJson.winePairing.hasOwnProperty('pairingText')) && (responseJson.winePairing.pairingText !== '')) {
@@ -154,8 +157,7 @@ function displayResultFood(responseJson) {
             $(`.wine-pairing-text-${responseJson.id}`).toggle();
         })
         $('body').on('click', `.wine-pairing-large-${responseJson.id}`, function(event) {
-            $('div.general-pairing').css('display', 'block');
-            $('h4.general-pairing').html(`
+            $('h3.general-pairing').html(`
                 Wine pairing for ${responseJson.title}`);
             $('p.general-pairing').html(`
                 ${responseJson.winePairing.pairingText}`);
@@ -292,12 +294,14 @@ function handleToggle() {
     $('main').on('click', '.dt-cocktail', function(event) {
         $('.cocktail-results').show();
         $('.food-results').hide();
+        $('.general-pairing-top').hide();
         $('.dt-cocktail').toggleClass('selected');
         $('.dt-food').toggleClass('selected');
     });
     $('main').on('click', '.dt-food', function(event) {
         $('.cocktail-results').hide();
         $('.food-results').show();
+        $('.general-pairing-top').show();
         $('.dt-cocktail').toggleClass('selected');
         $('.dt-food').toggleClass('selected');
     });
@@ -313,25 +317,31 @@ function setUpResultsDisplay(foodResponse, cocktailResponse) {
         </div>
         <div class="results">
             <div class="cocktail-results">
-                <h2>Have a cocktail while you cook:</h2>
+                <h2>Drink your dinner:</h2>
                 <ul class="cocktail-results-list"></ul>
-                <button class="see-previous-cocktails">See Previous</button>
-                <button class="see-more-cocktails">See More</button>
+                <nav role="nav" class="results-nav">
+                    <button class="see-previous-cocktails">Previous</button>
+                    <button class="see-more-cocktails">Next</button>
+                </nav>
+            </div>
+            <div class="general-pairing-top">
             </div>
             <div class="food-results">
-                <h2>Here are your recipes:</h2>
+                <h2>Actually eat something:</h2>
                 <ul class="food-results-list" id="food-results-list">
                 </ul>
-                <button class="see-previous-food">See Previous</button>
-                <button class="see-more-food">See More</button>
+                <nav role="nav" class="results-nav">
+                    <button class="see-previous-food">Previous</button>
+                    <button class="see-more-food">Next</button>
+                </nav>
             </div>
             <div class="general-pairing">
-                <h4 class="general-pairing"></h4>
+                <h3 class="general-pairing"></h3>
                 <p class="general-pairing"></p>
             </div>
         </div>
-        <button class="new-search">New Search</button>
     `);
+    $('header').append(`<button class="new-search">New Search</button>`);
     $('.see-previous-cocktails').css('display', 'none');
     $('.see-previous-food').css('display', 'none');
     let displayNumFood = 4;
@@ -556,12 +566,12 @@ function start() {
         $('main').html(`
         <form class="search-parameters">
         <h2>Search for Recipes</h2>
-        <fieldset name="cocktail-search">
+        <fieldset name="cocktail-search" class="cocktail-search">
             <legend>The important stuff:</legend>
             <label for="cocktail">Find me a cocktail with:<br>(Please separate items by a comma.)</label>
             <input type="text" name="cocktail" placeholder="tequila" id="cocktail">
         </fieldset>
-        <fieldset name="food-search">
+        <fieldset name="food-search" class="food-search">
             <legend>Oh and also, let's eat something:</legend>
             <fieldset name="required-parameters" class="required-parameters">
                 <legend class="sub-legend">Search by (at least of one the following):</legend>

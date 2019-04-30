@@ -449,6 +449,10 @@ button.new-search {
     display: none;
   }
 
+  header {
+    background-image: url(https://i.imgur.com/ngxR9JG.png);
+  }
+
   h2 {
     font-size: 24px;
   }
@@ -463,6 +467,7 @@ button.new-search {
 
   section.greeting {
     width: 90%;
+    padding: 0;
   }
 
   p {
@@ -483,6 +488,14 @@ button.new-search {
 
   label {
     font-size: 16px;
+  }
+
+  fieldset.food-search {
+    background-size: 50% auto;
+  }
+  
+  fieldset.cocktail-search {
+    background-size: 50% auto;
   }
 
   ul {

@@ -317,7 +317,7 @@ function setUpResultsDisplay(foodResponse, cocktailResponse) {
         </div>
         <div class="results">
             <div class="cocktail-results">
-                <h2>Drink your dinner:</h2>
+                <h2>Feed your spirit:</h2>
                 <ul class="cocktail-results-list"></ul>
                 <nav role="nav" class="results-nav">
                     <button class="see-previous-cocktails">Previous</button>
@@ -327,7 +327,7 @@ function setUpResultsDisplay(foodResponse, cocktailResponse) {
             <div class="general-pairing-top">
             </div>
             <div class="food-results">
-                <h2>Actually eat something:</h2>
+                <h2>And get cooking:</h2>
                 <ul class="food-results-list" id="food-results-list">
                 </ul>
                 <nav role="nav" class="results-nav">
@@ -344,6 +344,12 @@ function setUpResultsDisplay(foodResponse, cocktailResponse) {
     $('header').append(`<button class="new-search">New Search</button>`);
     $('.see-previous-cocktails').css('display', 'none');
     $('.see-previous-food').css('display', 'none');
+    if (cocktailResponse.drinks.length <= 4) {
+        $('.see-more-cocktails').css('display', 'none');
+    };
+    if (foodResponse.results.length <= 4) {
+        $('.see-more-food').css('display', 'none');
+    };
     let displayNumFood = 4;
     let displayNumCocktail = 4;
     getResultsCocktail(cocktailResponse, displayNumCocktail);
@@ -557,6 +563,7 @@ function handleSubmit() {
     $('main').submit(function(event) {
         event.preventDefault();
         buildURLs();
+        window.scrollTo(0, 0);
     })
 }
 

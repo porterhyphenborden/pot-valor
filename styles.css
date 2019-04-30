@@ -4,7 +4,7 @@
 }
 
 body {
-  max-width: 90%;
+  max-width: 95%;
   margin: 5px auto;
 }
 
@@ -21,7 +21,7 @@ header.smallbanner {
 
 img.logo {
   width: 200px;
-  margin-top: 5px;
+  margin-top: 3px;
 }
 
 img.smallbanner {
@@ -31,12 +31,13 @@ img.smallbanner {
 
 h2 {
   text-align: center;
-  font-size: 28px;
+  font-size: 24px;
   margin: 8px;
 }
 
 h4 {
   font-size: 20px;
+  margin: 0;
 }
 
 p {
@@ -47,8 +48,6 @@ p {
 ul {
   padding: 0;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
 }
 
 button {
@@ -84,6 +83,11 @@ legend {
 
 label {
   clear: left;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
 }
 
 .submit-button {
@@ -123,16 +127,16 @@ label {
 }
 
 img.recipe-img, img.cocktail-img {
-  width: 200px;
+  width: 100%;
   display: block;
-  margin: 10px;
+  margin: 0;
 }
 
 li.recipe-result, li.cocktail-result {
-  font-size: 22px;
+  position: relative;
+  font-size: 20px;
   font-weight: bold;
   list-style: none;
-  padding-top: 20px;
 }
 
 .recipe-result a:link, .cocktail-result a:link {
@@ -144,22 +148,22 @@ li.recipe-result, li.cocktail-result {
   font-weight: bold;
 }
 
-button.wp {
+button.wp-large, button.wp-small {
   display: block;
   margin: 0;
   font-size: 20px;
   font-weight: normal;
 }
 
-.general-pairing {
-  border: 1px solid lightslategray;
-  padding: 0 10px;
+div.general-pairing {
+  display: none;
+  padding: 2px 10px;
   border-radius: 4px;
 }
 
 .wpt p {
   font-weight: normal;
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .filter-container {
@@ -175,6 +179,31 @@ button.wp {
 
 fieldset.required-parameters {
   clear: left;
+}
+
+div.recipe-title-wrapper, div.cocktail-title-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: -moz-linear-gradient(top, rgba(252,252,252,0) 0%, rgba(252,252,252,0) 58%, rgba(252,252,252,1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, rgba(252,252,252,0) 0%,rgba(252,252,252,0) 58%,rgba(252,252,252,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, rgba(252,252,252,0) 0%,rgba(252,252,252,0) 58%,rgba(252,252,252,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  height: 100%;
+  width: 100%;
+}
+
+div.recipe-result-wrapper {
+  position: relative;
+}
+
+a.recipe-title, a.cocktail-title {
+  position: absolute;
+  bottom: 1px;
+  left: 1px;
+}
+
+a:visited {
+  color: darkslategray;
 }
 
 @media screen and (min-width: 50em) {
@@ -200,10 +229,68 @@ fieldset.required-parameters {
     width: 60%;
   }
 
-  li.recipe-result, li.cocktail-result {
+  .results {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  div.cocktail-results {
+    width: 40%
+  }
+
+  div.food-results {
+    width: 60%;
+  }
+
+  div.general-pairing {
     width: 25%;
   }
 
+  div.general-pairing p {
+    font-size: 17px;
+    line-height: 24px;
+  }
+
+  ul {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  li.recipe-result, li.cocktail-result {
+    margin: 1% 3%;
+    max-width: 44%;
+  }
+
+  img.recipe-img {
+    max-width: 260px;
+  }
+  
+  img.cocktail-img {
+    max-width: 180px;
+  }
+
+  li.recipe-result {
+    min-width: 213px;
+  }
+
+  li.cocktail-result {
+    min-width: 144px;
+  }
+
+  button.wp-large {
+    margin: 5px 0 0 0;
+    z-index: 1000;
+  }
+
+  button.wp-small {
+    display: none;
+  }
+
+  button.view-general {
+    display: none;
+  }
 }
 
 @media screen and (min-width: 70em) {
@@ -212,7 +299,28 @@ fieldset.required-parameters {
   }
 }
 
-@media screen and (max-width: 49em) {
+@media screen and (max-width: 70em) {
+
+  li.recipe-result, li.cocktail-result {
+    max-width: 85%;
+  }
+
+  div.cocktail-results {
+    width: 32%
+  }
+
+  div.food-results {
+    width: 40%;
+  }
+
+  div.general-pairing {
+    width: 28%;
+  }
+
+}
+
+
+@media screen and (max-width: 49.9em) {
   h1 {
     font-size: 28px;
   }
@@ -255,6 +363,38 @@ fieldset.required-parameters {
     justify-content: flex-start;
   }
 
+  li.recipe-result, li.cocktail-result {
+    position: relative;
+    margin: 5px auto;
+    font-size: 20px;
+    font-weight: bold;
+    list-style: none;
+  }
+
+  li.recipe-result {
+    max-width: 300px;
+  }
+
+  li.cocktail-result {
+    max-width: 260px;
+  }
+
+  div.cocktail-results {
+    width: 100%
+  }
+
+  div.food-results {
+    width: 100%;
+  }
+
+  div.general-pairing {
+    width: 100%;
+  }
+
+  button.view-general {
+    display: none;
+  }
+
   .filter-container.required {
     flex-direction: column;
   }
@@ -276,6 +416,18 @@ fieldset.required-parameters {
 
   .food-results {
     display: none;
+  }
+
+  button.wp-large {
+    display: none;
+  }
+
+  button.wp-small {
+    margin: 2px auto;
+  }
+
+  .recipe-result-wrapper {
+    width: 100%;
   }
 
 }

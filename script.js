@@ -96,20 +96,29 @@ function displayResultsCocktail(responseJson) {
             <a href="https://www.thecocktaildb.com/drink.php?c=${responseJson.drinks[0].idDrink}" target="_blank">
                 <img src="${responseJson.drinks[0].strDrinkThumb}" class="cocktail-img">
             </a>
-            <a href="https://www.thecocktaildb.com/drink.php?c=${responseJson.drinks[0].idDrink}" target="_blank">${responseJson.drinks[0].strDrink}</a>
-    `)
+            <div class="cocktail-title-wrapper">
+                <a class="cocktail-title" href="https://www.thecocktaildb.com/drink.php?c=${responseJson.drinks[0].idDrink}" target="_blank">${responseJson.drinks[0].strDrink}</a>
+            </div>
+        </li>`)
 }
 
 //display wine pairing
 function displayResultsWine(responseJson, searchTerm) {
     console.log(responseJson);
     console.log(searchTerm);
-    $('ul.food-results-list').before(`
-    <div class="general-pairing">
-        <h4>General wine pairing advice for ${searchTerm}</h4>
-        <p>${responseJson.pairingText}</p>
-    </div>
-    `)
+    $('div.general-pairing').css('display', 'block');
+    $('div.general-pairing').html(`
+        <h4 class="general-pairing">General wine pairing advice for ${searchTerm}</h4>
+        <p class="general-pairing">${responseJson.pairingText}</p>
+        <button class="view-general">View General Pairing Advice</button>
+    `);
+    $('body').on('click', `.view-general`, function(event) {
+        $(`h4.general-pairing`).html(`
+            General wine pairing advice for ${searchTerm}`);
+        $(`p.general-pairing`).html(`
+            ${responseJson.pairingText}`);
+        $('button.view-general').css('display', 'none');
+    });
 }
 
 //display each food recipe
@@ -119,25 +128,38 @@ function displayResultFood(responseJson) {
     console.log(`begin insert for ${responseJson.id}`);
     $('.food-results-list').append(`
     <li class="recipe-result ${responseJson.id}">
-        <a href="${responseJson.sourceUrl}" target="_blank">${responseJson.title}</a>
+        <div class="recipe-result-wrapper ${responseJson.id}">
+            <div class="recipe-title-wrapper">
+                <a href="${responseJson.sourceUrl}" target="_blank" class="recipe-title">${responseJson.title}</a>
+            </div>
+        </div>
     </li>`);
     if (responseJson.hasOwnProperty('image')) {
-        $(`li.${responseJson.id}`).prepend(`
+        $(`div.${responseJson.id}`).prepend(`
         <a href="${responseJson.sourceUrl}" target="_blank">
             <img src="${responseJson.image}" class="recipe-img">
         </a>`)
     }
     if ((responseJson.winePairing.hasOwnProperty('pairingText')) && (responseJson.winePairing.pairingText !== '')) {
         $(`li.${responseJson.id}`).append(`
-        <button class="wp wine-pairing-${responseJson.id}">View Wine Pairing</button>
+        <button class="wp-small wine-pairing-small-${responseJson.id}">View Wine Pairing</button>
+        <button class="wp-large wine-pairing-large-${responseJson.id}">View Wine Pairing</button>
         <div class="wpt wine-pairing-text-${responseJson.id}">
         </div>
         `)
         $(`.wine-pairing-text-${responseJson.id}`).css('display', 'none');
         $(`.wine-pairing-text-${responseJson.id}`).html(`<p>${responseJson.winePairing.pairingText}</p>
         `)
-        $('body').on('click', `.wine-pairing-${responseJson.id}`, function(event) {
+        $('body').on('click', `.wine-pairing-small-${responseJson.id}`, function(event) {
             $(`.wine-pairing-text-${responseJson.id}`).toggle();
+        })
+        $('body').on('click', `.wine-pairing-large-${responseJson.id}`, function(event) {
+            $('div.general-pairing').css('display', 'block');
+            $('h4.general-pairing').html(`
+                Wine pairing for ${responseJson.title}`);
+            $('p.general-pairing').html(`
+                ${responseJson.winePairing.pairingText}`);
+            $('button.view-general').css('display', 'block');
         })
     }
     console.log(`end insert for ${responseJson.id}`);
@@ -289,18 +311,24 @@ function setUpResultsDisplay(foodResponse, cocktailResponse) {
             <button class="dt-cocktail selected">COCKTAILS</button>
             <button class="dt-food">RECIPES</button>
         </div>
-        <div class="cocktail-results">
-            <h2>Have a cocktail while you cook:</h2>
-            <ul class="cocktail-results-list"></ul>
-            <button class="see-previous-cocktails">See Previous</button>
-            <button class="see-more-cocktails">See More</button>
-        </div>
-        <div class="food-results">
-            <h2>Here are your recipes:</h2>
-            <ul class="food-results-list" id="food-results-list">
-            </ul>
-            <button class="see-previous-food">See Previous</button>
-            <button class="see-more-food">See More</button>
+        <div class="results">
+            <div class="cocktail-results">
+                <h2>Have a cocktail while you cook:</h2>
+                <ul class="cocktail-results-list"></ul>
+                <button class="see-previous-cocktails">See Previous</button>
+                <button class="see-more-cocktails">See More</button>
+            </div>
+            <div class="food-results">
+                <h2>Here are your recipes:</h2>
+                <ul class="food-results-list" id="food-results-list">
+                </ul>
+                <button class="see-previous-food">See Previous</button>
+                <button class="see-more-food">See More</button>
+            </div>
+            <div class="general-pairing">
+                <h4 class="general-pairing"></h4>
+                <p class="general-pairing"></p>
+            </div>
         </div>
         <button class="new-search">New Search</button>
     `);

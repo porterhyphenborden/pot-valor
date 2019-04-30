@@ -207,7 +207,7 @@ li.recipe-result, li.cocktail-result {
 
 .recipe-result a:link, .cocktail-result a:link {
   text-decoration: none;
-  color: black;
+  color: #343330;
 }
 
 .recipe-result a:hover, .cocktail-result a:hover {
@@ -273,6 +273,7 @@ a:visited {
 
 nav.results-nav {
   position: relative;
+  height: auto;
 }
 
 button.see-more-food, button.see-more-cocktails {
@@ -316,6 +317,7 @@ button.new-search {
 
   section.greeting {
     width: 60%;
+    margin-top: 30px;
   }
 
   form {
@@ -549,7 +551,6 @@ button.new-search {
   .display-toggle {
     display: flex;
     flex-direction: row;
-    margin-top: 5px;
   }
 
   .display-toggle button {

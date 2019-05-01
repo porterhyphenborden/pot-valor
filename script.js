@@ -188,10 +188,8 @@ function getResultsFood(foodResponse, displayNumFood) {
         )
     }
     window.scrollTo(0, 0);
-    setTimeout(function() {
-        $('.food-results-list').fadeIn('2000');
-        $('.food-nav').fadeIn('3000');
-    }, 200);
+    $('.food-results-list').fadeIn('2000');
+    $('.food-nav').fadeIn('3000');
 }
 
 
@@ -212,10 +210,8 @@ function getResultsCocktail(responseJson, displayNumCocktail) {
         )
     }
     window.scrollTo(0, 0);
-    setTimeout(function() {
-        $('.cocktail-results-list').fadeIn('2000');
-        $('.cocktail-nav').fadeIn('3000');
-    }, 200);
+    $('.cocktail-results-list').fadeIn('2000');
+    $('.cocktail-nav').fadeIn('3000');
 }
 
 //handle user clicks to see next or previous results for food
@@ -224,27 +220,37 @@ function handleNavFood(foodResponse, displayNumFood) {
         $('.food-results-list').fadeOut();
         $('.food-results-list').empty();
         displayNumFood += 4;
-        if (displayNumFood >= 24) {
+        if ((displayNumFood >= 24) || (displayNumFood >= foodResponse.results.length)) {
             $('.see-more-food').css('display', 'none');
+            $('.see-previous-food').css('display', 'block');
         }
-        else if (displayNumFood <= 4) {
+        else if ((displayNumFood <= 4) && (displayNumFood < foodResponse.results.length)) {
             $('.see-previous-food').css('display', 'none');
+            $('.see-more-food').css('display', 'block');
+        }
+        else if (displayNumFood > 4) {
+            $('.see-previous-food').css('display', 'block');
         }
         else {
             $('.see-previous-food').css('display', 'block');
             $('.see-more-food').css('display', 'block');
-        }
+        }  
         getResultsFood(foodResponse, displayNumFood);
     });
     $('main').on('click', '.see-previous-food', function(event) {
         displayNumFood -= 4;
         $('.food-results-list').fadeOut();
         $('.food-results-list').empty();
-        if (displayNumFood >= 24) {
+        if ((displayNumFood >= 24) || (displayNumFood >= foodResponse.results.length)) {
             $('.see-more-food').css('display', 'none');
+            $('.see-previous-food').css('display', 'block');
         }
-        else if (displayNumFood <= 4) {
+        else if ((displayNumFood <= 4) && (displayNumFood < foodResponse.results.length)) {
             $('.see-previous-food').css('display', 'none');
+            $('.see-more-food').css('display', 'block');
+        }
+        else if (displayNumFood > 4) {
+            $('.see-previous-food').css('display', 'block');
         }
         else {
             $('.see-previous-food').css('display', 'block');
@@ -260,11 +266,16 @@ function handleNavCocktails(cocktailResponse, displayNumCocktail) {
         $('.cocktail-results-list').fadeOut();
         $('.cocktail-results-list').empty();
         displayNumCocktail += 4;
-        if (displayNumCocktail >= 24) {
+        if ((displayNumCocktail >= 24) || (displayNumCocktail >= cocktailResponse.drinks.length)) {
             $('.see-more-cocktails').css('display', 'none');
+            $('.see-previous-cocktails').css('display', 'block');
         }
-        else if (displayNumCocktail <= 4) {
+        else if ((displayNumCocktail <= 4) && (displayNumCocktail < cocktailResponse.drinks.length)) {
             $('.see-previous-cocktails').css('display', 'none');
+            $('.see-more-cocktails').css('display', 'block');
+        }
+        else if (displayNumCocktail > 4) {
+            $('.see-previous-cocktails').css('display', 'block');
         }
         else {
             $('.see-previous-cocktails').css('display', 'block');
@@ -276,11 +287,16 @@ function handleNavCocktails(cocktailResponse, displayNumCocktail) {
         $('.cocktail-results-list').fadeOut();
         $('.cocktail-results-list').empty();
         displayNumCocktail -= 4;
-        if (displayNumCocktail >= 24) {
+        if ((displayNumCocktail >= 24) || (displayNumCocktail >= cocktailResponse.drinks.length)) {
             $('.see-more-cocktails').css('display', 'none');
+            $('.see-previous-cocktails').css('display', 'block');
         }
-        else if (displayNumCocktail <= 4) {
+        else if ((displayNumCocktail <= 4) && (displayNumCocktail < cocktailResponse.drinks.length)) {
             $('.see-previous-cocktails').css('display', 'none');
+            $('.see-more-cocktails').css('display', 'block');
+        }
+        else if (displayNumCocktail > 4) {
+            $('.see-previous-cocktails').css('display', 'block');
         }
         else {
             $('.see-previous-cocktails').css('display', 'block');
